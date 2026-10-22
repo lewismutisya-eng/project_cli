@@ -18,15 +18,15 @@ def tracker(tmp_path):
 
 # ---------- models ----------
 def test_user_inherits_person():
-    user = User("Alex", "Alex@Test.com")
+    user = User("Amina", "Amina@Test.com")
     assert isinstance(user, Person)
-    assert user.email == "alex@test.com"
+    assert user.email == "amina@test.com"
 
 
 @pytest.mark.parametrize("bad", ["invalidemail", "a@b", "", "a b@c.com"])
 def test_invalid_email(bad):
     with pytest.raises(ValueError):
-        User("Alex", bad)
+        User("Amina", bad)
 
 
 def test_empty_name_rejected():
@@ -48,7 +48,7 @@ def test_normalize_date_formats():
 
 
 def test_task_status_property():
-    task = Task("Code", 1, "Alex")
+    task = Task("Code", 1, "Amina")
     assert task.status == "Pending"
     task.complete()
     assert task.is_complete
@@ -58,47 +58,47 @@ def test_task_status_property():
 
 # ---------- tracker / relationships ----------
 def test_full_flow_and_relationships(tracker):
-    tracker.add_user("Alex", "alex@test.com")
+    tracker.add_user("Amina", "amina@test.com")
     tracker.add_user("Sam", "sam@test.com")
-    project = tracker.add_project("Alex", "CLI Tool", "Python lab", "2026-11-30")
-    tracker.add_task("CLI Tool", "Write code", "Alex")
+    project = tracker.add_project("Amina", "CLI Tool", "Python lab", "2026-11-30")
+    tracker.add_task("CLI Tool", "Write code", "Amina")
     tracker.add_task("CLI Tool", "Review code", "Sam")
-    assert len(tracker.find_user("Alex").projects) == 1
-    assert project.contributors == ["Alex", "Sam"]
+    assert len(tracker.find_user("Amina").projects) == 1
+    assert project.contributors == ["Amina", "Sam"]
     assert project.progress == "0/2"
     tracker.complete_task("Write code")
     assert project.progress == "1/2"
 
 
 def test_duplicates_and_missing_refs(tracker):
-    tracker.add_user("Alex", "alex@test.com")
+    tracker.add_user("Amina", "amina@test.com")
     with pytest.raises(ValueError):
-        tracker.add_user("Alex", "other@test.com")
+        tracker.add_user("Amina", "other@test.com")
     with pytest.raises(ValueError):
-        tracker.add_user("Alexa", "alex@test.com")
+        tracker.add_user("Wanjiru", "amina@test.com")
     with pytest.raises(ValueError):
         tracker.add_project("Ghost", "P")
     with pytest.raises(ValueError):
-        tracker.add_task("Nope", "T", "Alex")
+        tracker.add_task("Nope", "T", "Amina")
     with pytest.raises(ValueError):
         tracker.complete_task("Nothing")
 
 
 def test_search_projects(tracker):
-    tracker.add_user("Alex", "alex@test.com")
-    tracker.add_project("Alex", "CLI Tool", "Python lab")
-    tracker.add_project("Alex", "Website", "landing page")
+    tracker.add_user("Amina", "amina@test.com")
+    tracker.add_project("Amina", "CLI Tool", "Python lab")
+    tracker.add_project("Amina", "Website", "landing page")
     assert [p.title for p in tracker.search_projects("python")] == ["CLI Tool"]
 
 
 def test_data_persists_between_runs(tmp_path):
     first = Tracker(str(tmp_path))
-    first.add_user("Alex", "alex@test.com")
-    first.add_project("Alex", "CLI Tool")
-    first.add_task("CLI Tool", "Code", "Alex")
+    first.add_user("Amina", "amina@test.com")
+    first.add_project("Amina", "CLI Tool")
+    first.add_task("CLI Tool", "Code", "Amina")
     second = Tracker(str(tmp_path))
     assert second.find_project("CLI Tool").tasks[0].title == "Code"
-    assert second.find_user("Alex").projects[0].title == "CLI Tool"
+    assert second.find_user("Amina").projects[0].title == "CLI Tool"
 
 
 # ---------- file I/O ----------
@@ -121,11 +121,11 @@ def test_save_creates_folder(tmp_path):
 # ---------- CLI ----------
 def test_cli_end_to_end(tmp_path, capsys):
     d = ["--data-dir", str(tmp_path)]
-    assert main(d + ["add-user", "--name", "Alex", "--email", "alex@test.com"]) == 0
-    assert main(d + ["add-project", "--user", "Alex", "--title", "CLI Tool"]) == 0
-    assert main(d + ["add-task", "--project", "CLI Tool", "--title", "Code", "--assigned-to", "Alex"]) == 0
+    assert main(d + ["add-user", "--name", "Amina", "--email", "amina@test.com"]) == 0
+    assert main(d + ["add-project", "--user", "Amina", "--title", "CLI Tool"]) == 0
+    assert main(d + ["add-task", "--project", "CLI Tool", "--title", "Code", "--assigned-to", "Amina"]) == 0
     assert main(d + ["complete-task", "--title", "Code"]) == 0
-    assert main(d + ["list-projects", "--user", "Alex"]) == 0
+    assert main(d + ["list-projects", "--user", "Amina"]) == 0
     assert "CLI Tool" in capsys.readouterr().out
 
 
