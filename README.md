@@ -32,15 +32,16 @@ pip install -r requirements.txt
 ## Usage
 ```bash
 python main.py --help
-python main.py add-user --name "Alex" --email "alex@test.com"
+python main.py add-user --name "name" --email "name@gmail.com"
 python main.py list-users
-python main.py add-project --user "Alex" --title "CLI Tool" --description "Python lab" --due-date 2026-11-30
-python main.py list-projects --user "Alex"
+python main.py add-project --user "name" --title "CLI Tool" --description "Python lab" --due-date 2026-11-30
+python main.py list-projects --user "name"
 python main.py search-projects --keyword python
-python main.py add-task --project "CLI Tool" --title "Implement add-task" --assigned-to "Alex"
+python main.py add-task --project "CLI Tool" --title "Implement add-task" --assigned-to "name"
 python main.py list-tasks --project "CLI Tool"
 python main.py complete-task --title "Implement add-task"
 ```
+
 ## Tests
 ```bash
 pytest

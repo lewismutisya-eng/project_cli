@@ -9,38 +9,38 @@ from utils.helpers import load_data, save_data
 
 
 def test_user_creation():
-    user = User("Amina", "amina@test.com")
-    assert user.name == "Amina"
-    assert user.email == "amina@test.com"
+    user = User("name", "name@gmail.com")
+    assert user.name == "name"
+    assert user.email == "name@gmail.com"
 
 
 def test_user_is_a_person():
-    assert isinstance(User("Amina", "amina@test.com"), Person)
+    assert isinstance(User("name", "name@gmail.com"), Person)
 
 
 def test_invalid_email():
     with pytest.raises(ValueError):
-        User("Amina", "invalidemail")
+        User("name", "invalidemail")
 
 
 def test_project_creation():
-    project = Project("CLI Tool", "A project", "2026-12-31", "Amina")
+    project = Project("CLI Tool", "A project", "2026-12-31", "name")
     assert project.title == "CLI Tool"
-    assert project.owner == "Amina"
+    assert project.owner == "name"
 
 
 def test_empty_project_title():
     with pytest.raises(ValueError):
-        Project("", "No title", "2026-12-31", "Amina")
+        Project("", "No title", "2026-12-31", "name")
 
 
 def test_bad_due_date():
     with pytest.raises(ValueError):
-        Project("CLI Tool", "A project", "tomorrow", "Amina")
+        Project("CLI Tool", "A project", "tomorrow", "name")
 
 
 def test_task_complete():
-    task = Task("Write code", "CLI Tool", "Amina")
+    task = Task("Write code", "CLI Tool", "name")
     assert task.status == "Pending"
     task.complete()
     assert task.status == "Complete"
@@ -58,15 +58,15 @@ def test_load_bad_json(tmp_path):
 
 def test_save_and_load(tmp_path):
     path = str(tmp_path / "data.json")
-    save_data(path, [{"name": "Amina"}])
-    assert load_data(path) == [{"name": "Amina"}]
+    save_data(path, [{"name": "name"}])
+    assert load_data(path) == [{"name": "name"}]
 
 
 def test_cli_full_flow(tmp_path, monkeypatch, capsys):
     monkeypatch.setattr(main, "DATA_DIR", str(tmp_path))
-    main.main(["add-user", "--name", "Amina", "--email", "amina@test.com"])
-    main.main(["add-project", "--user", "Amina", "--title", "CLI Tool"])
-    main.main(["add-task", "--project", "CLI Tool", "--title", "Code", "--assigned-to", "Amina"])
+    main.main(["add-user", "--name", "name", "--email", "name@gmail.com"])
+    main.main(["add-project", "--user", "name", "--title", "CLI Tool"])
+    main.main(["add-task", "--project", "CLI Tool", "--title", "Code", "--assigned-to", "name"])
     main.main(["complete-task", "--title", "Code"])
     tasks = load_data(str(tmp_path / "tasks.json"))
     assert tasks[0]["status"] == "Complete"
